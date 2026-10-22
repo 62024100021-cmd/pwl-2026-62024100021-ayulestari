@@ -15,6 +15,12 @@ Route::resource('pasien', PatientController::class);
 Route::get('/dokter', [DoctorController::class, 'index'])
     ->name('dokter.index');
 
+Route::get('/dokter/create', [DoctorController::class, 'create'])
+    ->name('dokter.create');
+
+Route::post('/dokter', [DoctorController::class, 'store'])
+    ->name('dokter.store');
+
 Route::get('/poli', [PoliController::class, 'index'])
     ->name('poli.index');
 
