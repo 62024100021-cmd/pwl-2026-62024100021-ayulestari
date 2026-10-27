@@ -1,30 +1,32 @@
-
 @extends('layouts.app')
+
+@section('title', 'Data Dokter')
 
 @section('content')
 <div class="container">
     <h1>Data Dokter</h1>
 
-    <a href="{{ route('dokter.create') }}">+ Tambah Dokter</a>
-
     @if (session('success'))
-        <p style="color: green;">
+        <div class="alert alert-success">
             {{ session('success') }}
-        </p>
+        </div>
     @endif
 
-    <br><br>
+    <a href="{{ route('dokter.create') }}" class="btn btn-primary mb-3">
+        Tambah Dokter
+    </a>
 
-    <table border="1" cellpadding="10" cellspacing="0">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>No</th>
+                <th>No.</th>
                 <th>Kode Dokter</th>
-                <th>Nama</th>
+                <th>Nama Dokter</th>
                 <th>Spesialisasi</th>
                 <th>Poli</th>
-                <th>Telepon</th>
+                <th>No. Telepon</th>
                 <th>Status</th>
+                <th>Aksi</th>
             </tr>
         </thead>
 
@@ -39,15 +41,18 @@
                     <td>{{ $doctor->phone ?? '-' }}</td>
                     <td>
                         @if ($doctor->is_active)
-                            Aktif
+                            <span class="badge text-bg-success">Aktif</span>
                         @else
-                            Tidak Aktif
+                            <span class="badge text-bg-secondary">Tidak Aktif</span>
                         @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('dokter.edit', $doctor->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">Belum ada data dokter.</td>
+                    <td colspan="8" class="text-center">Belum ada data dokter.</td>
                 </tr>
             @endforelse
         </tbody>

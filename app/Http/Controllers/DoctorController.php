@@ -40,4 +40,40 @@ class DoctorController extends Controller
             ->route('dokter.index')
             ->with('success', 'Data dokter berhasil ditambahkan.');
     }
+
+    // ===== BARU (A2): mulai dari sini =====
+
+    public function edit(Doctor $doctor)
+    {
+        $polis = Poli::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('dokter.edit', compact('doctor', 'polis'));
+    }
+
+    public function update(Request $request, Doctor $doctor)
+    {
+        $validated = $request->validate([
+            'doctor_code' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('doctors', 'doctor_code')->ignore($doctor->id),
+            ],
+            'name' => ['required', 'string', 'max:255'],
+            'specialization' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'is_active' => ['required', 'boolean'],
+            'poli_id' => ['required', 'exists:polis,id'],
+        ]);
+
+        $doctor->update($validated);
+
+        return redirect()
+            ->route('dokter.index')
+            ->with('success', 'Data dokter berhasil diperbarui.');
+    }
+
+    // ===== BARU (A2): sampai sini =====
 }

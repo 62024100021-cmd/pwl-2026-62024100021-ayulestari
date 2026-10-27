@@ -12,4 +12,15 @@ class PoliController extends Controller
 
         return view('poli.index', compact('polis'));
     }
+
+    // ===== BARU (B2): mulai dari sini =====
+
+    public function show(Poli $poli)
+    {
+        $poli->load('doctors');
+
+        return view('poli.show', compact('poli'));
+    }
+
+    // ===== BARU (B2): sampai sini =====
 }

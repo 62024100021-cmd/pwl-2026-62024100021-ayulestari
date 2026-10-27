@@ -1,13 +1,10 @@
-
 @extends('layouts.app')
 
-@section('title', 'Pasien')
+@section('title', 'Data Pasien')
 
 @section('content')
 <div class="container">
     <h1>Data Pasien</h1>
-    <p>Selamat datang di Sistem Informasi Klinik.</p>
-
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -27,8 +24,6 @@
     <a href="{{ route('pasien.create') }}" class="btn btn-primary mb-3">
         Tambah Pasien
     </a>
-
-    <p>Jumlah Pasien: {{ $jumlahPasien }}</p>
 
     <table class="table table-bordered">
         <thead>
