@@ -8,17 +8,42 @@ use Illuminate\Validation\Rule;
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $judul = 'Data Pasien';
-        $jumlahPasien = Patient::count();
-        $patients = Patient::latest()->get();
+        $query = Patient::query();
 
-        return view('pasien.index', compact(
-            'judul',
-            'jumlahPasien',
-            'patients'
-        ));
+        // SEARCH: nama ATAU nomor rekam medis
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('medical_record_number', 'like', "%{$search}%");
+            });
+        }
+
+        // ===== BARU: FILTER jenis kelamin (hanya L atau P yang diterima) =====
+        if ($request->filled('gender') && in_array($request->gender, ['L', 'P'])) {
+            $query->where('gender', $request->gender);
+        }
+
+        // ===== BARU: SORTING dengan whitelist kolom =====
+        $allowedSorts = ['name', 'medical_record_number', 'created_at'];
+
+        $sort = in_array($request->sort, $allowedSorts)
+            ? $request->sort
+            : 'name';
+
+        $direction = $request->direction === 'desc'
+            ? 'desc'
+            : 'asc';
+
+        $patients = $query
+            ->orderBy($sort, $direction)
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('pasien.index', compact('patients'));
     }
 
     public function create()

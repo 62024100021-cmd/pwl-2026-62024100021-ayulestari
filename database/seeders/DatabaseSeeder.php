@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             PoliSeeder::class,
             DoctorSeeder::class,
             AssignPoliToDoctorsSeeder::class,
+            PatientSeeder::class,
         ]);
     }
 }
